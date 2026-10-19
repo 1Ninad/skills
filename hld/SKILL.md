@@ -3,66 +3,53 @@ name: hld
 description: Design or explain a clear high-level system design (HLD) for an interview question, backend feature, or product system. Use when asked for architecture, system design, HLD, components, APIs, data flow, an architecture diagram, or design tradeoffs. Produces a technology-agnostic design through requirements, entities, interfaces, and a simple (not too much simple/useless) build-up diagram.
 ---
 
+# Simplified
+Always use the `/asd-ste100` skill.
+
+
 # High-Level Design
 
-Use a short, linear design process. Make the simplest complete design first; do not prematurely optimize it. Technology-agnostic HLD, not – prototype of project/feature.
+Use a short, linear design process. Make the simplest complete design first. Technology-agnostic HLD, but not prototype-level of project/feature.
 
-This skill adapts the public Hello Interview delivery structure: requirements, core entities, API/system interface, optional data flow, then high-level design. Do not reproduce its course material or presume its deep-dive recommendations apply to the user’s system.
+This skill adapts the public Hello Interview delivery structure (every point/structure should be for very core main fundamentals level of the project - so not to list all the detailed possible; just main core important): core entities, Core-main API/system interface, optional data flow, then high-level design. Do not reproduce its course material or presume its deep-dive recommendations apply to the user’s system.
 
 ### Technology-agnostic HLD
 
-Do not select, compare, or name implementation technologies in the diagram. Use capability names such as `database`, `relational data store`, `object storage`, `event broker`, `cache`, `identity provider`, and `application service, etc...`.
+Do not select, compare, or name actual code-implementation-specific technologies in the diagram. Use capability (i.e. broad) names such as `database`, `object storage`, `event broker`, `cache`, `middleware`, `CI/CD pipeline`, and `application service, etc...`.
 
 Keep explicitly given external systems as integration constraints, not as technology recommendations. For example, describe an existing identity provider as `existing company identity provider` unless its name is essential to the requested scope.
 
-Very important: do not over-engineer/over-complicate the design, etc content: Avoid unnecessary components, complexity, or optimizations. Do not add a cache, queue, CDN, replica, retry mechanism, monitoring tool, or load balancer merely because it is common.
+Very important: do not over-engineer or over-complicate the design, etc.: Avoid unnecessary components, complexity, or optimizations. Do not add a cache, queue, CDN, replica, retry mechanism, monitoring tool, or load balancer merely because it is common or to make the design look more fancy. Always think before doing any such thing, include if & only if really required.
 
-For each component (even if im saying major content will be tech-agnostic; this section will be like proposed or such choices presenting - into some section incl.):
-- Compare 2–6 or such different possible exact, actual, specific technologies and in a table as well. For each, give fit for this system (considering all constraints, context, etc.), benefits, limitations, operational burden, and meaningful clear simple-worded tradeoffs.
-- Leave the decision with the user. Also, make a recommendation only if the material constraints are known - with clear logical reasoning ('why').
 
-Use current, primary sources when a choice depends on mutable product capabilities, support status, pricing, limits, or security/compliance claims.
+Check the requirements & ask clarifying questions when the missing context is genuinely necessary to produce a correct design. Make and label reasonable assumptions when they do not materially affect the architecture.
 
-```text
-Use $hld-design for [system/feature].
+## Identify the hardest parts
 
-For [component and purpose], do not choose a technology yet. First identify
-the system-specific facts or constraints needed to decide. Then compare 2–6 or such different possible exact, actual, specific exact technologies using all the different constraints, context, project/feature's requirements mentioned, etc. For each option, give a short description, suitability note, benefits, limitations, and clear simple-worded tradeoffs. Mark unknowns clearly. Do not recommend one unless I explicitly ask after the comparison.
-```
-
-Check the requirements and ask clarifying questions when the missing context is genuinely necessary to produce a correct design. Do not ask questions merely to fill in optional details; make and label reasonable assumptions when they do not materially affect the architecture.
-
-## Identify and solve the hardest parts
-
-Before finalizing the architecture, identify the top few genuinely hardest or most challenging parts of the feature or application, if any really exist. Keep this list focused on the risks that require the most architectural judgment or could most seriously affect correctness/reliability/security/scale/or user experience; do not invent difficulty for its own sake.
+Before finalizing the architecture, identify the topmost few really hardest or most critical or most challenging parts of the product or application or the feature, if any really. Keep this list focused on the risks that require the most architectural judgment or could most seriously affect correctness/reliability/security/scale/or user experience; do not invent difficulty for its own sake.
 
 For every challenging part:
 - State why it is difficult or high-risk in this system.
-- Show the specific design decisions and mechanisms that solve it - exactly how.
-- Explain the relevant invariants, and trade-offs well enough to demonstrate that the solution is correct.
-- Verify explicitly that the proposed architecture and flow address it; do not leave the challenge as an observation without a design.
 ---
 If essential context is missing, ask a targeted clarifying question before committing to a design. If the user cannot provide it, state the assumption and how it affects the solution.
 
 ## Define the contract before drawing (if not initially discussed or in plan mode docs or anywhere such - else refer from there and mention in output)
-- List only the core entities: actors & essential nouns/resources. Start with names, not a detailed schema.
-- Map each core functional requirement to one interface (not necessarily always – but logically as per system architects at FAANG). Default to REST for an external CRUD-style interface or else you can think of other as well if necessary & suitable. State authentication & authorization at the boundary when access control is material (only if necessary/relevant/helpful(.
-- Use a short endpoint format:
+- List only the very core-main-fundamental entities: actors & essential nouns/resources. Start with names, not a detailed schema.
+-  Default to REST for an external CRUD-style interface or else you can think of other as well if necessary & suitable. State authentication & authorization at the boundary when access control is material (only if necessary/relevant/helpful).
+- Use a short endpoint format for the main-core-fundamentals part (else no such content):
 ```text
 POST /a/requests
 body: { … } → { request_id, status }
 
 GET /a/requests/{request_id} → Request
 ```
-- For an asynchronous, batch, or multi-stage system, add a numbered data flow before the architecture. Do not add this section for a simple request-response design.
 
 ## Build the HLD incrementally
 Build the architecture one functional requirement at a time.
 1. Start with the request entry point, the service that owns the operation, and the minimal durable state it needs.
 2. Trace one representative operation from request to response. Say what each component does and what state changes.
-3. Add only the component required by the next core operation.
-4. Check that the resulting design satisfies the stated functional requirements and relevant non-functional requirements, etc.
-5. Record unresolved scale, failure, or such concerns as `Next design questions` - if any really exist, else not.
+3. Add only the component required by the next core main fundamental operation.
+4. Check that the resulting design satisfies the stated functional requirements & relevant non-functional requirements, etc.
 
 Use capability names only. Technology selection belongs exclusively in text content (below/after diagram).
 
@@ -96,13 +83,12 @@ Use plain prose plus a component table instead when Mermaid cannot express the r
 Produce this order, omitting empty sections, depending on what is covered initially in chat - so skip relevant accordingly and mention it in chat:
 
 1. **Core entities**
-2. **Interfaces**
-3. **Data flow**: only when it adds value
-4. **High-level design**: one diagram
-5. **Components and responsibilities**: a short table
-6. **Hardest / most challenging parts and their solutions**: include the top few real challenges, if any, and the corresponding correctness-focused design decisions
+2. **Data flow**: only when it adds real-value
+3. **High-level design**: one diagram
+4. **Core components and responsibilities**: a short, simplified table
+5. **Top Hardest / most challenging / most critical parts (without any solution)**: include the top few real challenges, if any.
 
 
 ## HLD boundary
 
-Do not enter deep dives by default. If a user asks for deeper design work, get into deep with different possible options, logical reasoning like real architect, trade-offs, analytic thinking (not dumb like vibe coding - anything chosen randomly directly without any analysis/comparison/study), etc.
+Do not enter deep dives or tech-stack-specifics by default.
